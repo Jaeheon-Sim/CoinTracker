@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { useMatch } from "react-router-dom";
-import {
-  Link,
-  Outlet,
-  useLocation,
-  useParams,
-} from "react-router-dom";
+import { Route, useMatch } from "react-router-dom";
+import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
+import { Helmet } from "react-helmet";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -62,6 +60,10 @@ const OverviewItem = styled.div`
   }
 `;
 
+const OverviewItemtwo = styled(OverviewItem)`
+  padding-left: 56px;
+`;
+
 const Tabs = styled.div`
   display: grid;
   margin: 25px 0px;
@@ -81,6 +83,11 @@ const Tab = styled.span<{ isActive: boolean }>`
   a {
     display: block;
   }
+`;
+const Button = styled(Tab)`
+  color: ${(props) => props.theme.textColor};
+  width: 30%;
+  background-color: rgba(0, 0, 0, 0);
 `;
 
 interface RouteState {
@@ -155,6 +162,9 @@ function Coin() {
   const { coinID } = useParams();
   const { state } = useLocation() as RouteState;
 
+  const setterFn = useSetRecoilState(isDarkAtom);
+  const isDark = useRecoilValue(isDarkAtom);
+
   const priceMatch = useMatch("/:coinID/price");
   const chartMatch = useMatch("/:coinID/chart");
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
@@ -163,7 +173,10 @@ function Coin() {
   );
   const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
     ["tickers", coinID!],
-    () => fetchCoinTickers(coinID)
+    () => fetchCoinTickers(coinID),
+    {
+      refetchInterval: 5000,
+    }
   );
   // const [info, setInfo] = useState<InfoData>();
   // const [loading, setLoading] = useState(true);
@@ -185,13 +198,22 @@ function Coin() {
   // }, [coinID]);
   return (
     <Container>
+      <Helmet>
+        <title>{infoLoading ? "Loading..." : infoData?.name}</title>
+      </Helmet>
       <Header>
-        {infoLoading ? (
-          <Title>Loading...</Title>
-        ) : (
-          <Title>{infoData?.name}</Title>
-        )}
+        <Title>{infoLoading ? "Loading..." : infoData?.name}</Title>
+        <button onClick={() => setterFn((current) => !current)}>
+          Dark Mode {isDark ? "on" : "off"}
+        </button>
       </Header>
+
+      <Tabs>
+        <Button isActive={true}>
+          <Link to={`/`}>Back</Link>
+        </Button>
+      </Tabs>
+
       {tickersLoading ? (
         <Loader>Loading...</Loader>
       ) : (
@@ -201,16 +223,20 @@ function Coin() {
               <span>Rank</span>
               <span>{tickersData?.rank}</span>
             </OverviewItem>
-            <OverviewItem>
+            <OverviewItemtwo>
               <span>Symbol</span>
               <span>{infoData?.symbol}</span>
+            </OverviewItemtwo>
+            <OverviewItem>
+              <span>Open Source</span>
+              <span>{infoData?.open_source ? "Yes" : "No"}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
               <span>price</span>
-              <span>{tickersData?.quotes.USD.ath_price}</span>
+              <span>${tickersData?.quotes.USD.ath_price.toFixed(2)}</span>
             </OverviewItem>
             <OverviewItem>
               <span>MAx supply</span>
@@ -225,7 +251,6 @@ function Coin() {
               <Link to={`/${coinID}/price`}>Price</Link>
             </Tab>
           </Tabs>
-
           <Outlet />
         </>
       )}
