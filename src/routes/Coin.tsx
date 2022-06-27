@@ -4,8 +4,7 @@ import { Route, useMatch } from "react-router-dom";
 import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
-import Chart from "./Chart";
-import Price from "./Price";
+
 import { Helmet } from "react-helmet";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isDarkAtom } from "../atoms";

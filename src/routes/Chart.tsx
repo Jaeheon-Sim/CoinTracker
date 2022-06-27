@@ -44,7 +44,7 @@ function Chart() {
             chart: {
               height: 500,
               width: 500,
-              foreColor: "#4cd137",
+              foreColor: isDark ? "#4cd137" : "#9c88ff",
               toolbar: {
                 show: false,
               },
