@@ -83,10 +83,22 @@ const Tab = styled.span<{ isActive: boolean }>`
     display: block;
   }
 `;
+
+const ButtonTab = styled(Tabs)`
+  margin: 0;
+`;
+
 const Button = styled(Tab)`
   color: ${(props) => props.theme.textColor};
   width: 30%;
   background-color: rgba(0, 0, 0, 0);
+`;
+
+const BtnSt = styled.button`
+  border: 0px;
+  color: ${(props) => props.theme.textColor};
+  background-color: rgba(0, 0, 0, 0);
+  text-align: end;
 `;
 
 interface RouteState {
@@ -159,13 +171,13 @@ interface PriceData {
 
 function Coin() {
   const { coinID } = useParams();
-  const { state } = useLocation() as RouteState;
 
   const setterFn = useSetRecoilState(isDarkAtom);
   const isDark = useRecoilValue(isDarkAtom);
 
   const priceMatch = useMatch("/:coinID/price");
   const chartMatch = useMatch("/:coinID/chart");
+
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
     ["info", coinID!],
     () => fetchCoinInfo(coinID)
@@ -202,16 +214,16 @@ function Coin() {
       </Helmet>
       <Header>
         <Title>{infoLoading ? "Loading..." : infoData?.name}</Title>
-        <button onClick={() => setterFn((current) => !current)}>
-          Dark Mode {isDark ? "on" : "off"}
-        </button>
       </Header>
 
-      <Tabs>
+      <ButtonTab>
         <Button isActive={true}>
           <Link to={`/`}>Back</Link>
         </Button>
-      </Tabs>
+        <BtnSt onClick={() => setterFn((current) => !current)}>
+          Dark Mode {isDark ? "on" : "off"}
+        </BtnSt>
+      </ButtonTab>
 
       {tickersLoading ? (
         <Loader>Loading...</Loader>

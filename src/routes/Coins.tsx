@@ -69,10 +69,17 @@ interface Icoin {
   type: string;
 }
 
+const BtnSt = styled.button`
+  position: absolute;
+  right: 8%;
+  border: 1px double;
+`;
+
 function Coins() {
   const { isLoading, data } = useQuery<Icoin[]>("allCoins", fetchCoins);
   const setterFn = useSetRecoilState(isDarkAtom);
   const isDark = useRecoilValue(isDarkAtom);
+
   // const [coins, setCoins] = useState<CoinInterface[]>([]);
   // const [loading, setLoading] = useState(true);
   // useEffect(() => {
@@ -90,9 +97,9 @@ function Coins() {
       </Helmet>
       <Header>
         <Title>코인</Title>
-        <button onClick={() => setterFn((current) => !current)}>
+        <BtnSt onClick={() => setterFn((current) => !current)}>
           Dark Mode {isDark ? "on" : "off"}
-        </button>
+        </BtnSt>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
