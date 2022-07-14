@@ -92,6 +92,12 @@ const Button = styled(Tab)`
   color: ${(props) => props.theme.textColor};
   width: 30%;
   background-color: rgba(0, 0, 0, 0);
+  &:hover {
+    a {
+      color: ${(props) => props.theme.accentColor};
+      transition: color 0.2s ease-in;
+    }
+  }
 `;
 
 const BtnSt = styled.button`
@@ -99,6 +105,10 @@ const BtnSt = styled.button`
   color: ${(props) => props.theme.textColor};
   background-color: rgba(0, 0, 0, 0);
   text-align: end;
+  &:hover {
+    color: ${(props) => props.theme.accentColor};
+    transition: color 0.2s ease-in;
+  }
 `;
 
 interface RouteState {

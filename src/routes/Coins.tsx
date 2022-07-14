@@ -53,6 +53,33 @@ const Loader = styled.span`
   text-align: center;
 `;
 
+const ButtonTab = styled.div`
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  margin-bottom: 10px;
+`;
+
+const Button = styled.span<{ isActive: boolean }>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 18px;
+  font-weight: 400;
+
+  width: 30%;
+  background-color: rgba(0, 0, 0, 0);
+
+  border-radius: 10px;
+  padding: 7px;
+  color: ${(props) => props.theme.textColor};
+  &:hover {
+    a {
+      color: ${(props) => props.theme.accentColor};
+      transition: color 0.2s ease-in;
+    }
+  }
+`;
+
 const Img = styled.img`
   width: 30px;
   height: 30px;
@@ -70,9 +97,14 @@ interface Icoin {
 }
 
 const BtnSt = styled.button`
-  position: absolute;
-  right: 8%;
-  border: 1px double;
+  border: 0px;
+  color: ${(props) => props.theme.textColor};
+  background-color: rgba(0, 0, 0, 0);
+  text-align: end;
+  &:hover {
+    color: ${(props) => props.theme.accentColor};
+    transition: color 0.2s ease-in;
+  }
 `;
 
 function Coins() {
@@ -97,10 +129,16 @@ function Coins() {
       </Helmet>
       <Header>
         <Title>코인</Title>
+      </Header>
+      <ButtonTab>
+        <Button isActive={true}>
+          <Link to={`/`}>Back</Link>
+        </Button>
         <BtnSt onClick={() => setterFn((current) => !current)}>
           Dark Mode {isDark ? "on" : "off"}
         </BtnSt>
-      </Header>
+      </ButtonTab>
+
       {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
