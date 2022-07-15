@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "webpack --mode production",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
@@ -54,7 +54,8 @@
     "@types/react-helmet": "^6.1.5",
     "@types/react-query": "^1.2.9",
     "@types/react-router-dom": "^5.3.3",
-    "@types/styled-components": "^5.1.25"
+    "@types/styled-components": "^5.1.25",
+    "gh-pages": "^4.0.0"
   },
   "homepage": "https://jaeheon-sim.github.io/CoinTracker"
 }
