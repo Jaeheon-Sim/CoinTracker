@@ -199,6 +199,7 @@ function Coin() {
       refetchInterval: 5000,
     }
   );
+  console.log(tickersData);
   // const [info, setInfo] = useState<InfoData>();
   // const [loading, setLoading] = useState(true);
   // const [priceinfo, setPriceInfo] = useState<PriceData>();
@@ -269,7 +270,12 @@ function Coin() {
               <Link to={`/${coinID}/chart`}>Chart</Link>
             </Tab>
             <Tab isActive={priceMatch !== null}>
-              <Link to={`/${coinID}/price`}>Price</Link>
+              <Link
+                to={`/${coinID}/price`}
+                state={{ data: tickersData?.quotes.USD.ath_price.toFixed(2) }}
+              >
+                Price
+              </Link>
             </Tab>
           </Tabs>
           <Outlet />

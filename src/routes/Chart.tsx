@@ -30,11 +30,20 @@ function Chart() {
         "Loading chart..."
       ) : (
         <ApexChart
-          type="line"
+          type="candlestick"
           series={[
             {
               name: "Price",
-              data: data?.map((price) => parseInt(price.close)) as number[],
+              //data: data?.map((price) => parseInt(price.close)) as number[],
+              data: data?.map((price) => {
+                return [
+                  price.time_close,
+                  price.open,
+                  price.high,
+                  price.low,
+                  price.close,
+                ];
+              }) as unknown as number[],
             },
           ]}
           options={{
@@ -42,7 +51,7 @@ function Chart() {
               mode: isDark ? "dark" : "light",
             },
             chart: {
-              height: 500,
+              height: 350,
               width: 500,
               foreColor: isDark ? "#4cd137" : "#9c88ff",
               toolbar: {
@@ -50,21 +59,41 @@ function Chart() {
               },
               background: "transparent",
             },
+            stroke: {
+              curve: "smooth",
+              width: 2,
+            },
             grid: { show: false },
             xaxis: {
-              axisTicks: {
-                show: false,
+              type: "datetime",
+              categories: data?.map((price) => price.time_close),
+              labels: {
+                style: {
+                  colors: isDark ? "#4cd137" : "#9c88ff",
+                },
               },
+            },
+            yaxis: {
+              show: false,
             },
             fill: {
               type: "gradient",
               gradient: { gradientToColors: ["blue"], stops: [0, 100] },
             },
+
             colors: ["red"],
             tooltip: {
               theme: "true",
               y: {
                 formatter: (value) => `$${value.toFixed(2)}`,
+              },
+            },
+            plotOptions: {
+              candlestick: {
+                colors: {
+                  upward: "#3C90EB",
+                  downward: "#DF7D46",
+                },
               },
             },
           }}
